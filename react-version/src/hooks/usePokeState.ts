@@ -2215,13 +2215,16 @@ export const usePokeState = () => {
   }, [selectProfile]);
 
   const logoutProfile = useCallback(() => {
+    if (activeProfile) {
+      localStorage.removeItem(`idle_poke_owner_${activeProfile}`);
+    }
     setActiveProfile(null);
     localStorage.removeItem('idle_poke_active_profile');
     setActiveTeam([]);
     setBox([]);
     setWildPoke(null);
     setActiveTrainer(null);
-  }, []);
+  }, [activeProfile]);
 
   const deleteProfile = useCallback((username: string) => {
     setProfiles(prev => {
@@ -2230,6 +2233,7 @@ export const usePokeState = () => {
       return updated;
     });
     localStorage.removeItem(`idle_poke_save_${username}`);
+    localStorage.removeItem(`idle_poke_owner_${username}`);
     if (activeProfile === username) {
       logoutProfile();
     }
