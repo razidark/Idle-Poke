@@ -1,0 +1,2133 @@
+/* Import modern and retro Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;800;900&family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    --bg-dark: #070913;
+    --bg-panel: rgba(16, 20, 38, 0.6);
+    --border-color: rgba(255, 203, 5, 0.15);
+    --border-hover: rgba(255, 203, 5, 0.4);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --accent: #ffcb05; /* Vibrant Pokemon Yellow */
+    --accent-glow: rgba(255, 203, 5, 0.25);
+    --gold: #ffcb05;
+    --gold-glow: rgba(255, 203, 5, 0.2);
+    --grass: #10b981;
+    --fire: #f43f5e;
+    --water: #3b82f6;
+    
+    --shadow-retro: 4px 4px 0px rgba(0, 0, 0, 0.35);
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-image: linear-gradient(rgba(10, 11, 20, 0.65), rgba(10, 11, 20, 0.65)), url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1600&q=80');
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    color: var(--text-primary);
+    margin: 0;
+    padding: 12px 24px;
+    height: 100vh;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#version {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-glass);
+    opacity: 0.6;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 8px;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+.game-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 24px;
+    font-weight: bold;
+    color: #070913; /* Deep black text matching the body background */
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0;
+    text-shadow: 
+        -2px -2px 0 #ffcb05,  
+         2px -2px 0 #ffcb05,
+        -2px  2px 0 #ffcb05,
+         2px  2px 0 #ffcb05,
+        -2px  0px 0 #ffcb05,
+         2px  0px 0 #ffcb05,
+         0px -2px 0 #ffcb05,
+         0px  2px 0 #ffcb05,
+         0px 3px 10px rgba(255, 203, 5, 0.5);
+}
+
+.game-subtitle {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: #ffcb05; /* Matching yellow */
+    opacity: 0.9;
+    margin-top: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-shadow: 0 0 4px rgba(255, 203, 5, 0.3);
+}
+
+/* Page title */
+h1, h2, h3, h4 {
+    color: #fff;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0;
+}
+
+small#version {
+    position: absolute;
+    top: 12px;
+    left: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Master Layout Container */
+#gameContainer {
+    display: grid;
+    grid-template-columns: 340px 1fr 320px;
+    grid-gap: 16px;
+    width: 100%;
+    max-width: 1360px;
+    height: calc(100vh - 84px);
+    min-height: 0;
+    padding: 16px;
+    background: rgba(10, 11, 20, 0.85);
+    border: 3px solid #1e293b;
+    border-radius: 20px;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    backdrop-filter: blur(16px);
+    box-sizing: border-box;
+}
+
+/* Game elements default box overrides */
+#gameContainer > div {
+    background: var(--bg-panel);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: inset 0 0 12px rgba(99, 102, 241, 0.05);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+}
+
+#gameContainer > div:hover {
+    border-color: var(--border-hover);
+    box-shadow: 
+        inset 0 0 16px rgba(99, 102, 241, 0.08),
+        0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Column 1: Left List Panel */
+#listBox {
+    flex-grow: 1 !important;
+    height: 0 !important;
+    overflow-y: auto !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+}
+
+#listBox::-webkit-scrollbar {
+    width: 6px;
+}
+#listBox::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.3);
+    border-radius: 3px;
+}
+
+#viewSelectBox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Column 2: Center (Combat Area & Log) */
+#battleArena {
+    height: 320px;
+    position: relative;
+    border-radius: 16px;
+    border: 3px solid #1c1c1f;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    box-shadow: var(--shadow-retro);
+    flex-shrink: 0;
+}
+
+/* Dynamic Battleground Biome Styling */
+.bg-route-plain {
+    background: 
+        radial-gradient(ellipse at center, rgba(16, 185, 129, 0.1), transparent 80%),
+        linear-gradient(rgba(10, 11, 20, 0.8), rgba(10, 11, 20, 0.85)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M0 16h16V0H0v16zm1-1V1h14v14H1z' fill='%2310b981' fill-opacity='.04'/%3E%3C/svg%3E");
+}
+
+.bg-route-forest {
+    background: 
+        radial-gradient(ellipse at center, rgba(34, 197, 94, 0.15), transparent 80%),
+        linear-gradient(rgba(8, 16, 12, 0.85), rgba(10, 11, 20, 0.9)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l4 8H8l4-8zm0 8l6 10H6l6-10z' fill='%2322c55e' fill-opacity='.04'/%3E%3C/svg%3E");
+}
+
+.bg-route-cave {
+    background: 
+        radial-gradient(ellipse at center, rgba(148, 163, 184, 0.12), transparent 80%),
+        linear-gradient(rgba(15, 16, 22, 0.9), rgba(10, 11, 20, 0.95)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath d='M0 0h20v20H0V0zm2 2v16h16V2H2z' fill='%2364748b' fill-opacity='.03'/%3E%3C/svg%3E");
+}
+
+.bg-route-gym {
+    background: 
+        radial-gradient(ellipse at center, rgba(139, 92, 246, 0.2), transparent 80%),
+        linear-gradient(rgba(14, 11, 24, 0.85), rgba(10, 11, 20, 0.9)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M15 0L30 15L15 30L0 15Z' fill='%238b5cf6' fill-opacity='.05'/%3E%3C/svg%3E");
+}
+
+/* Pedestals in Arena */
+#enemyBox::before, #playerBox::before {
+    content: '';
+    position: absolute;
+    border: 3px solid #1c1c1f;
+    border-radius: 50%;
+    background-color: #657e5b;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.25);
+    z-index: 1;
+}
+
+#enemyBox::before {
+    width: 120px;
+    height: 32px;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#playerBox::before {
+    width: 140px;
+    height: 38px;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Pokemon Containers inside Arena */
+#enemyBox, #playerBox {
+    position: absolute !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#enemyBox {
+    top: 20px;
+    right: 32px;
+    width: 200px;
+    height: 150px;
+}
+
+#playerBox {
+    bottom: 12px;
+    left: 32px;
+    width: 220px;
+    height: 160px;
+}
+
+.pokeBox {
+    width: 100% !important;
+    height: 100% !important;
+    float: none !important;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Sprites placement */
+.pokeBox .img {
+    z-index: 2;
+    position: absolute;
+    object-fit: contain;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.4));
+}
+
+#enemyBox .img {
+    width: 72px;
+    height: 72px;
+    bottom: 22px;
+    left: calc(50% - 36px);
+}
+
+#playerBox .img {
+    width: 80px;
+    height: 80px;
+    bottom: 18px;
+    left: calc(50% - 40px);
+}
+
+#player.frontSprite .img {
+    transform: scaleX(-1); /* Flip front sprite to face right */
+}
+
+/* Move HUD elements out to mimic gameboy style */
+/* Enemy info top-left of arena, Player info bottom-right of arena */
+.pokeBox .name, .pokeBox .hp, .pokeBox .hpBar, .pokeBox .status {
+    position: absolute;
+    z-index: 3;
+}
+
+/* Custom retro HUD plates */
+#enemyBox .pokeBox::after, #playerBox .pokeBox::after {
+    content: '';
+    position: absolute;
+    background-color: #f4f4ec;
+    border: 3.5px solid #1c1c1f;
+    border-radius: 8px;
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+    z-index: 2;
+}
+
+#enemyBox .pokeBox::after {
+    top: 0px;
+    left: -140px;
+    width: 160px;
+    height: 64px;
+}
+
+#playerBox .pokeBox::after {
+    bottom: 12px;
+    right: -140px;
+    width: 180px;
+    height: 70px;
+}
+
+/* Enemy Text & HP Placements */
+#enemyBox .name {
+    top: 6px;
+    left: -130px;
+    font-size: 11px !important;
+    font-family: 'Press Start 2P', monospace;
+    color: #1c1c1f !important;
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#enemyBox .hp {
+    display: none; /* Hide raw HP fraction for enemy like retro games */
+}
+
+#enemyBox .hpBar {
+    top: 34px;
+    left: -105px;
+    width: 110px;
+    height: 8px;
+}
+
+/* Player Text & HP Placements */
+#playerBox .name {
+    bottom: 52px;
+    right: -130px;
+    font-size: 11px !important;
+    font-family: 'Press Start 2P', monospace;
+    color: #1c1c1f !important;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#playerBox .hp {
+    bottom: 20px;
+    right: -130px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: #3f3f4a;
+}
+
+#playerBox .hpBar {
+    bottom: 38px;
+    right: -130px;
+    width: 120px;
+    height: 8px;
+}
+
+#playerBox .expBar {
+    bottom: 15px;
+    right: -130px;
+    width: 120px;
+    height: 4px;
+    background: #1e1e24 !important;
+}
+
+#playerBox .expBar::-webkit-progress-value {
+    background: var(--accent);
+}
+#playerBox .expBar::-moz-progress-bar {
+    background: var(--accent);
+}
+
+/* Hide raw status text inside battle arena */
+.pokeBox .status {
+    display: none;
+}
+
+/* Town action buttons overlay card in center of battle arena */
+#townBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: none; /* Controlled by display.js style.display */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 11, 20, 0.94) !important;
+    border: 3px solid var(--accent);
+    border-radius: 16px;
+    padding: 24px 36px;
+    box-shadow: 0 0 25px rgba(255, 203, 5, 0.35);
+    min-width: 300px;
+}
+
+#townBox button {
+    box-shadow: var(--shadow-retro);
+}
+
+/* Column 2 Lower: Console Log */
+#console {
+    flex-grow: 1 !important;
+    height: 0 !important;
+    overflow-y: auto !important;
+    background: #05060b !important;
+    border: 2px solid #1e293b;
+    border-radius: 12px;
+    padding: 10px;
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.05);
+}
+
+/* CRT Screen Effect on Console */
+#console::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 10;
+    background-size: 100% 3px, 6px 100%;
+    pointer-events: none;
+}
+
+#console-text {
+    padding-left: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.6;
+    color: #a78bfa;
+}
+
+#console-text span {
+    text-shadow: 0 0 4px currentColor;
+}
+
+/* Column 3: Right Panel (Inventory & Stats) */
+#invBox {
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+#invBox p {
+    margin: 0;
+}
+
+#currency {
+    font-family: 'Press Start 2P', monospace;
+    color: var(--gold);
+    text-shadow: 0 0 8px var(--gold-glow);
+    font-size: 14px;
+}
+
+#navBox {
+    flex-grow: 1 !important;
+    height: 0 !important;
+    overflow-y: auto !important;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+#navBox p {
+    margin: 0;
+    display: flex;
+    gap: 8px;
+}
+
+#navBox p .button {
+    flex: 1;
+}
+
+/* General Buttons styling */
+.button, button, select {
+    background: linear-gradient(180deg, #18181b 0%, #09090b 100%);
+    border: 2px solid var(--accent);
+    color: #fff;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-family: 'Press Start 2P', monospace;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.2s;
+    outline: none;
+}
+
+.button:hover, button:hover, select:hover {
+    border-color: #fef08a;
+    box-shadow: 
+        0 0 12px rgba(255, 203, 5, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.button:active, button:active, select:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+#viewSelectBox .button {
+    flex: 1 1 45%;
+}
+
+#heal.button {
+    width: 100%;
+    margin-bottom: 4px;
+    border-color: var(--grass);
+    background: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
+}
+#heal.button:hover {
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+#muteButton.sound-active {
+    border-color: var(--grass);
+    background: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
+}
+#muteButton.sound-active:hover {
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+/* List Items styling */
+#listBox ul li {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+#listBox ul li:hover {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+#listBox ul li a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Route list locks and highlights */
+#routeList li a {
+    display: block;
+    width: 100%;
+}
+
+/* Team and Storage List specific tweaks */
+.listPoke {
+    flex-wrap: wrap;
+}
+
+.listPoke p {
+    margin: 0 !important;
+}
+
+.listPoke img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.pokeListName {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Swaps/Control buttons inside items */
+.pokeDeleteButton {
+    color: var(--fire) !important;
+    font-weight: bold;
+    order: 9;
+}
+
+.pokeUpButton, .pokeDownButton, .pokeFirstButton, .pokeEvolveButton, .toStorageButton {
+    padding: 2px 4px !important;
+    font-size: 8px !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: none !important;
+}
+
+.pokeEvolveButton {
+    border-color: var(--gold) !important;
+    color: var(--gold);
+}
+
+/* Quality colors mapping on active states */
+.activeNormal {
+    color: var(--grass) !important;
+    text-shadow: 0 0 6px rgba(16, 185, 129, 0.2);
+}
+.inactiveNormal {
+    color: var(--text-secondary) !important;
+}
+.activeShiny {
+    color: var(--gold) !important;
+    text-shadow: 0 0 8px var(--gold-glow);
+}
+.inactiveShiny {
+    color: rgba(234, 179, 8, 0.6) !important;
+}
+.dead {
+    color: var(--fire) !important;
+    opacity: 0.5;
+}
+
+/* Pokedex registry seen/owned colors */
+.pokeDex0 { color: #475569; }
+.pokeDex1 { color: #f1f5f9; font-weight: bold; }
+.pokeDex2 { color: var(--gold); font-weight: bold; }
+.pokeDex3, .pokeDex5 { color: #38bdf8; font-style: italic; }
+.pokeDex4, .pokeDex7 { color: #fb7185; font-style: italic; }
+.pokeDex6 { color: #a855f7; font-weight: bold; }
+.pokeDex8 { color: #f43f5e; font-weight: bold; }
+
+/* Progress bars styling override */
+progress {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1.5px solid #1c1c1f !important;
+    border-radius: 4px;
+    background: #3f3f46 !important;
+    overflow: hidden;
+}
+
+/* HP Color levels */
+progress::-webkit-progress-bar { background: #3f3f46; }
+progress::-webkit-progress-value { background: #10b981; }
+progress::-moz-progress-bar { background: #10b981; }
+
+#enemyBox progress::-webkit-progress-value { background: #ef4444; }
+#enemyBox progress::-moz-progress-bar { background: #ef4444; }
+
+/* Modal popups glass look */
+.modalContainer {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+}
+
+.modalDialog {
+    background: #0f1224;
+    border: 3px solid var(--accent);
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+    color: var(--text-primary);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 600px;
+}
+
+.modalDialog h3 {
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 12px;
+}
+
+/* Attacking animation shakes */
+.pokeBox .img.attacked-right {
+    animation: hit-shake-right 0.08s ease-out;
+}
+.pokeBox .img.attacked-left {
+    animation: hit-shake-left 0.08s ease-out;
+}
+
+@keyframes hit-shake-right {
+    0% { translate: 0 0; }
+    30% { translate: 8px -4px; }
+    70% { translate: -8px 4px; }
+    100% { translate: 0 0; }
+}
+
+@keyframes hit-shake-left {
+    0% { translate: 0 0; }
+    30% { translate: -8px -4px; }
+    70% { translate: 8px 4px; }
+    100% { translate: 0 0; }
+}
+
+/* Responsive Scaling Queries */
+@media (max-width: 1024px) {
+    body {
+        padding: 8px;
+        height: auto;
+        overflow: auto;
+    }
+    #gameContainer {
+        grid-template-columns: 1fr;
+        padding: 12px;
+        margin: 10px auto;
+        height: auto;
+        min-height: auto;
+    }
+    #leftColumn, #centerColumn, #rightColumn {
+        grid-column: 1 !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    #listBox {
+        height: 360px !important;
+        flex-grow: 0 !important;
+    }
+    #battleArena {
+        height: 280px;
+    }
+    #enemyBox .pokeBox::after {
+        left: -110px;
+        width: 130px;
+    }
+    #playerBox .pokeBox::after {
+        right: -110px;
+        width: 140px;
+    }
+    #enemyBox .name {
+        left: -100px;
+        max-width: 110px;
+    }
+    #enemyBox .hpBar {
+        left: -90px;
+        width: 80px;
+    }
+    #playerBox .name {
+        right: -100px;
+        max-width: 120px;
+    }
+    #playerBox .hp {
+        right: -100px;
+    }
+    #playerBox .hpBar, #playerBox .expBar {
+        right: -100px;
+        width: 90px;
+    }
+    #console {
+        height: 160px !important;
+        flex-grow: 0 !important;
+    }
+    #navBox {
+        height: auto !important;
+        flex-grow: 0 !important;
+        overflow-y: visible !important;
+    }
+}
+
+/* Modal toast style popup notifications */
+#modalPopup {
+    z-index: 9999;
+    display: none;
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    background: rgba(16, 185, 129, 0.95);
+    border: 2.5px solid #10b981;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.3);
+    color: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+/* World Map Container & Pins */
+#worldMapContainer {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2.5px solid var(--border-color);
+    background: #000;
+}
+
+#activeMapImage {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    opacity: 0.85;
+    image-rendering: pixelated;
+}
+
+#activeMapLabel {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background: rgba(10, 11, 20, 0.90);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    border: 1.5px solid var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    pointer-events: none;
+    z-index: 20;
+}
+
+#mapPins {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.map-pin {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 4px rgba(0,0,0,0.9);
+    pointer-events: auto;
+    cursor: pointer;
+    background-color: var(--accent);
+    border: 1.5px solid #fff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.map-pin:hover {
+    transform: translate(-50%, -50%) scale(1.35);
+    box-shadow: 0 0 10px #fff;
+    z-index: 100;
+}
+
+.map-pin.active {
+    width: 12px;
+    height: 12px;
+    background-color: var(--grass);
+    border: 2px solid #fff;
+    z-index: 110;
+    box-shadow: 0 0 12px var(--grass);
+    animation: pin-pulse 1.8s infinite ease-in-out;
+}
+
+.map-pin.locked {
+    background-color: #475569;
+    border-color: #64748b;
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Tooltip styles */
+.map-pin-tooltip {
+    visibility: hidden;
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(10, 11, 20, 0.95);
+    border: 1.5px solid var(--accent);
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: #fff;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    line-height: 1.4;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    pointer-events: none;
+    z-index: 120;
+    opacity: 0;
+    transition: opacity 0.2s, visibility 0.2s;
+}
+
+.map-pin:hover .map-pin-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.map-pin-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--accent) transparent transparent transparent;
+}
+
+@keyframes pin-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+/* Pokedex Grid View */
+#pokedexBox {
+    padding: 8px;
+}
+
+#dexList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.pokedex-item {
+    background: rgba(30, 41, 59, 0.25);
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 6px 4px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90px;
+}
+
+.pokedex-item:hover {
+    background: rgba(30, 41, 59, 0.5);
+    border-color: var(--accent);
+    box-shadow: 0 4px 12px rgba(255, 203, 5, 0.15);
+    transform: translateY(-2px);
+}
+
+.pokedex-item .dex-number {
+    position: absolute;
+    top: 4px;
+    left: 6px;
+    font-size: 7px;
+    color: var(--text-secondary);
+    font-weight: bold;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.pokedex-item .dex-image {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    image-rendering: pixelated;
+    margin: 4px 0 2px;
+    display: block;
+}
+
+/* Silhouette for seen but not caught */
+.pokedex-item.seen .dex-image {
+    filter: brightness(0) contrast(100%);
+    opacity: 0.5;
+}
+
+/* Unseen */
+.pokedex-item.unseen .dex-image {
+    filter: brightness(0) contrast(0%);
+    opacity: 0.1;
+}
+
+.pokedex-item.unseen .dex-name {
+    color: #475569;
+}
+
+.pokedex-item.caught .dex-image {
+    filter: none;
+}
+
+.pokedex-item.shiny .dex-image {
+    filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.7));
+}
+
+.pokedex-item .dex-name {
+    font-size: 8px;
+    font-family: 'Press Start 2P', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    margin-top: 4px;
+    color: var(--text-primary);
+}
+
+/* Pokéball caught indicator */
+.pokedex-item .caught-indicator {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-size: 8px;
+    line-height: 1;
+}
+
+/* Active Trainer Character Map Pin */
+.map-pin.active-trainer {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-image: url('assets/other/trainer.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: translate(-50%, -50%);
+    z-index: 150;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    animation: trainer-bounce 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes trainer-bounce {
+    0% {
+        transform: translate(-50%, -50%) translateY(0);
+    }
+    100% {
+        transform: translate(-50%, -50%) translateY(-4px);
+    }
+}
+
+/* Floating Damage Numbers */
+.floating-damage {
+    position: absolute;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    font-weight: bold;
+    color: #f43f5e;
+    text-shadow: 
+        -1.5px -1.5px 0 #000,  
+         1.5px -1.5px 0 #000,
+        -1.5px  1.5px 0 #000,
+         1.5px  1.5px 0 #000;
+    z-index: 250;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: float-up-fade 0.8s forwards ease-out;
+}
+
+.floating-damage.crit {
+    color: #facc15;
+    font-size: 13px;
+    animation: float-up-fade-crit 1.0s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes float-up-fade {
+    0% {
+        transform: translate(-50%, -50%) translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) translateY(-35px);
+        opacity: 0;
+    }
+}
+
+@keyframes float-up-fade-crit {
+    0% {
+        transform: translate(-50%, -50%) scale(0.6) translateY(0);
+        opacity: 1;
+    }
+    20% {
+        transform: translate(-50%, -50%) scale(1.3) translateY(-5px);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.0) translateY(-50px);
+        opacity: 0;
+    }
+}
+
+/* Numerical HP and EXP overlays */
+#playerBox .exp {
+    position: absolute;
+    bottom: 2px;
+    right: -130px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    color: #475569;
+    z-index: 3;
+}
+
+#enemyBox .hp {
+    display: block !important;
+    bottom: 12px;
+    left: -130px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    color: #3f3f4a;
+    position: absolute;
+    z-index: 3;
+}
+
+/* Attack Visual Effects (VFX) inside Battle Arena */
+.attack-vfx-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 40;
+}
+
+.vfx-element {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/* Fire particles */
+.vfx-spark {
+    width: 6px;
+    height: 6px;
+    background: #f97316;
+    box-shadow: 0 0 6px #ef4444;
+    border-radius: 50%;
+    animation: vfx-spark-anim 0.5s forwards ease-out;
+}
+
+@keyframes vfx-spark-anim {
+    0% {
+        transform: translate(-50%, -50%) scale(1) translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.2) translate(var(--dx), var(--dy));
+        opacity: 0;
+    }
+}
+
+/* Water bubbles */
+.vfx-bubble {
+    width: 8px;
+    height: 8px;
+    border: 1px solid #93c5fd;
+    background: rgba(147, 197, 253, 0.4);
+    box-shadow: 0 0 4px #3b82f6;
+    border-radius: 50%;
+    animation: vfx-bubble-anim 0.6s forwards ease-out;
+}
+
+@keyframes vfx-bubble-anim {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5) translateY(0);
+        opacity: 0.8;
+    }
+    80% {
+        transform: translate(-50%, -50%) scale(1.1) translateY(-20px);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.3) translateY(-25px);
+        opacity: 0;
+    }
+}
+
+/* Grass leaves */
+.vfx-leaf {
+    width: 10px;
+    height: 6px;
+    background: #10b981;
+    box-shadow: 0 0 3px #047857;
+    border-radius: 80% 10%;
+    animation: vfx-leaf-anim 0.6s forwards linear;
+}
+
+@keyframes vfx-leaf-anim {
+    0% {
+        transform: translate(-50%, -50%) translate(var(--sx), var(--sy)) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) translate(0, 0) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Electric zaps */
+.vfx-electric {
+    width: 4px;
+    height: 25px;
+    background: #facc15;
+    box-shadow: 0 0 8px #eab308;
+    animation: vfx-electric-anim 0.2s steps(2) 3 forwards;
+}
+
+@keyframes vfx-electric-anim {
+    0% {
+        transform: translate(-50%, -50%) rotate(var(--rot)) scaleY(0.2);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(var(--rot)) scaleY(1.2) translateX(3px);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(var(--rot)) scaleY(1.0) translateX(-3px);
+        opacity: 0;
+    }
+}
+
+/* Normal scratch impact */
+.vfx-scratch {
+    width: 30px;
+    height: 4px;
+    background: #fff;
+    box-shadow: 0 0 6px #fff;
+    transform: translate(-50%, -50%) rotate(var(--rot));
+    animation: vfx-scratch-anim 0.3s forwards ease-out;
+}
+
+@keyframes vfx-scratch-anim {
+    0% {
+        width: 0;
+        opacity: 1;
+    }
+    100% {
+        width: 35px;
+        opacity: 0;
+    }
+}
+
+/* Retro RPG Dialog & Speech Bubble style */
+.npc-dialog-box {
+    display: flex;
+    background: #18181b !important;
+    border: 3.5px solid var(--accent);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.35);
+    align-items: center;
+    gap: 16px;
+}
+
+.npc-avatar-box {
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: #09090b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 8px rgba(255,255,255,0.05);
+}
+
+.npc-speech-bubble {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    line-height: 1.8;
+    color: #fff;
+    flex-grow: 1;
+}
+
+/* Town illustrations */
+.town-illustration {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    margin-bottom: 12px;
+    overflow: hidden;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+.town-illustration-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(10,11,20,0.9) 100%);
+    padding: 8px 12px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--accent);
+    text-transform: uppercase;
+}
+
+.town-descr {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    text-align: left;
+    padding: 0 8px;
+}
+
+/* Quest & Goal Tracker Styles */
+#questBox {
+    background: rgba(10, 11, 20, 0.70);
+    border: 2.5px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+#questBox h3 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    text-transform: uppercase;
+}
+#questProgressBar {
+    appearance: none;
+    border: none;
+    border-radius: 6px;
+    background: #1e1e24;
+    overflow: hidden;
+}
+#questProgressBar::-webkit-progress-bar {
+    background: #1e1e24;
+    border-radius: 6px;
+}
+#questProgressBar::-webkit-progress-value {
+    background: var(--grass);
+    border-radius: 6px;
+}
+#questProgressBar::-moz-progress-bar {
+    background: var(--grass);
+    border-radius: 6px;
+}
+
+/* Move Clicker Panel Styles */
+#movePlate {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+    width: 100%;
+    flex-shrink: 0;
+}
+.move-btn {
+    background: #27272a;
+    border: 2px solid #3f3f46;
+    border-radius: 8px;
+    color: #fff;
+    padding: 8px 4px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    text-align: center;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    outline: none;
+}
+.move-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #3f3f46;
+}
+.move-btn:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+.move-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+.move-name {
+    font-size: 7px;
+    font-weight: bold;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+    text-shadow: 0 0 4px rgba(255,203,5,0.2);
+}
+.move-info {
+    font-size: 6px;
+    color: var(--text-secondary);
+}
+
+/* Healing Overlay and Slots */
+.healing-tray {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+    background: #18181b;
+    border: 3px solid #3f3f46;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.8);
+}
+.ball-slot {
+    width: 24px;
+    height: 24px;
+    background: #27272a;
+    border-radius: 50%;
+    border: 2px solid #52525b;
+    position: relative;
+    transition: all 0.2s ease;
+}
+.ball-slot.lit {
+    background-image: url('assets/other/pokeball.png');
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-color: var(--accent);
+    box-shadow: 0 0 12px rgba(255,203,5,0.7);
+    background-color: #3f3f46;
+}
+
+/* Upgrades Shop UI styling */
+#upgradesItems li {
+    background: rgba(0,0,0,0.15);
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+#upgradesItems li button {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: linear-gradient(180deg, #eab308 0%, #ca8a04 100%);
+    border: 1px solid #ca8a04;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 4px;
+    align-self: flex-start;
+    transition: all 0.1s ease;
+}
+#upgradesItems li button:hover:not(:disabled) {
+    background: #facc15;
+}
+#upgradesItems li button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background: #27272a;
+    color: var(--text-secondary);
+    border-color: #3f3f46;
+}
+
+/* Combat Control Bar Styles */
+#combatControlBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 11, 20, 0.70);
+    border: 2.5px solid var(--border-color);
+    border-radius: 12px;
+    padding: 8px 12px;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+.control-speed-group {
+    display: flex;
+    gap: 4px;
+}
+.control-btn {
+    background: #27272a;
+    border: 2px solid #3f3f46;
+    border-radius: 8px;
+    color: #fff;
+    padding: 6px 12px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.control-btn:hover {
+    background: #3f3f46;
+    border-color: var(--accent);
+}
+.control-btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+.speed-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+    font-weight: bold;
+    box-shadow: 0 0 8px rgba(255,203,5,0.4);
+}
+
+/* Trainer Card Styles */
+.trainer-header {
+    display: flex;
+    align-items: center;
+    background: rgba(0,0,0,0.25);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    gap: 16px;
+}
+.trainer-avatar {
+    font-size: 32px;
+    width: 56px;
+    height: 56px;
+    background: #18181b;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.trainer-info {
+    flex-grow: 1;
+}
+.trainer-name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 4px;
+}
+.trainer-subtitle {
+    font-size: 9px;
+    color: var(--text-secondary);
+}
+.trainer-stats-row {
+    display: flex;
+    gap: 12px;
+}
+.t-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #18181b;
+    border: 1.5px solid var(--border-color);
+    border-radius: 8px;
+    padding: 4px 8px;
+    min-width: 60px;
+}
+.t-stat .lbl {
+    font-size: 7px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+.t-stat .val {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: #fff;
+}
+.card-section {
+    background: rgba(0,0,0,0.15);
+    border: 1.5px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+}
+.card-section h4 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    margin: 0 0 8px;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    border-bottom: 1.5px solid var(--border-color);
+    padding-bottom: 4px;
+}
+.card-records {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 10px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+.card-records span {
+    color: #fff;
+    font-weight: bold;
+}
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+.badge-icon {
+    background: #18181b;
+    border: 2px solid #27272a;
+    border-radius: 8px;
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 18px;
+    transition: all 0.2s ease;
+    filter: grayscale(100%);
+    opacity: 0.35;
+    position: relative;
+}
+.badge-icon.unlocked {
+    filter: grayscale(0%);
+    opacity: 1;
+    border-color: var(--accent);
+    background: rgba(255,203,5,0.05);
+    box-shadow: 0 0 10px rgba(255,203,5,0.25);
+}
+.badge-name {
+    font-size: 7px;
+    color: var(--text-secondary);
+    font-weight: bold;
+    display: block;
+    margin-top: 4px;
+}
+.badge-icon.unlocked .badge-name {
+    color: var(--accent);
+}
+.recent-battle-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid #27272a;
+    border-radius: 6px;
+    padding: 4px 8px;
+    color: var(--text-secondary);
+}
+.recent-battle-item span.victory {
+    color: var(--grass);
+    font-weight: bold;
+}
+.recent-battle-item span.shiny-badge {
+    color: var(--accent);
+    font-weight: bold;
+    background: rgba(255,203,5,0.15);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 0 4px;
+    margin-right: 4px;
+}
+
+/* Manage Moves Styles */
+.move-manage-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #18181b;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+.move-manage-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.move-manage-name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    font-weight: bold;
+}
+.move-manage-sub {
+    font-size: 9px;
+    color: var(--text-secondary);
+}
+.move-manage-controls {
+    display: flex;
+    gap: 4px;
+}
+.move-manage-btn {
+    background: #27272a;
+    border: 1.5px solid #3f3f46;
+    border-radius: 4px;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 10px;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
+.move-manage-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #3f3f46;
+}
+.move-manage-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Drag and Drop Custom Styles */
+.draggable-poke-item {
+    cursor: grab;
+    transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.draggable-poke-item:active {
+    cursor: grabbing;
+}
+.draggable-poke-item.dragging {
+    opacity: 0.4;
+    border-style: dashed !important;
+    transform: scale(0.96);
+}
+.draggable-poke-item.drag-over {
+    border-color: var(--accent) !important;
+    background: rgba(255, 203, 5, 0.08) !important;
+    box-shadow: inset 0 0 10px rgba(255, 203, 5, 0.25) !important;
+    transform: scale(1.02);
+}
+
+/* PokeIdle.com Theme Overhaul Styles */
+
+/* Glassmorphism Containers */
+#listBox, #console, #rightColumn > div, #combatControlBar, #questBox, #gymLeaderBox {
+    background: rgba(18, 20, 29, 0.75) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 2px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+#listBox:hover, #rightColumn > div:hover, #combatControlBar:hover, #questBox:hover, #gymLeaderBox:hover {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Battle Arena Background Override */
+#battleArena {
+    background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=800&q=80') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+/* Roster Cards redesigned */
+.listPoke {
+    display: flex !important;
+    align-items: center !important;
+    background: rgba(0, 0, 0, 0.25) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.04) !important;
+    border-radius: 10px !important;
+    padding: 8px 12px !important;
+    margin-bottom: 8px !important;
+    gap: 12px !important;
+    transition: all 0.2s ease !important;
+    position: relative;
+    cursor: grab;
+}
+.listPoke:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+.listPoke[status="activeNormal"], .listPoke[status="activeShiny"] {
+    border-color: var(--accent) !important;
+    background: rgba(255, 203, 5, 0.04) !important;
+    box-shadow: 0 0 12px rgba(255, 203, 5, 0.15);
+}
+.listPoke[status="dead"] {
+    opacity: 0.45;
+    filter: grayscale(85%);
+}
+
+/* Roster Inner Layout Flex blocks */
+.roster-card-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 12px;
+}
+.roster-card-image {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    border: 1.5px solid rgba(255,255,255,0.05);
+    flex-shrink: 0;
+}
+.roster-card-image img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+.roster-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-grow: 1;
+    min-width: 0;
+}
+.roster-card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+.roster-card-name {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.roster-card-level {
+    font-size: 9px;
+    color: var(--text-secondary);
+    margin-left: 2px;
+}
+.roster-card-meters {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 105px;
+    flex-shrink: 0;
+}
+
+/* Custom Progress Bars */
+.card-progress-bar {
+    width: 100%;
+    height: 5px;
+    background: #18181b;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.03);
+}
+.card-progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.2s ease;
+}
+.card-progress-fill.hp {
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 0 4px rgba(16,185,129,0.3);
+}
+.card-progress-fill.exp {
+    background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+    box-shadow: 0 0 4px rgba(59,130,246,0.3);
+}
+.card-progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8px;
+    color: var(--text-secondary);
+    font-family: 'Outfit', sans-serif;
+    font-weight: bold;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+/* Elemental Type Badges */
+.type-badge {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+.type-badge.fire { background-color: #ef4444; }
+.type-badge.water { background-color: #3b82f6; }
+.type-badge.grass { background-color: #22c55e; }
+.type-badge.electric { background-color: #eab308; color: #000; text-shadow: none; }
+.type-badge.normal { background-color: #a1a1aa; }
+.type-badge.flying { background-color: #a855f7; }
+.type-badge.poison { background-color: #a855f7; }
+.type-badge.psychic { background-color: #ec4899; }
+.type-badge.bug { background-color: #84cc16; }
+.type-badge.rock { background-color: #78716c; }
+.type-badge.ground { background-color: #ca8a04; }
+.type-badge.ice { background-color: #06b6d4; }
+.type-badge.ghost { background-color: #6366f1; }
+.type-badge.dragon { background-color: #4f46e5; }
+.type-badge.steel { background-color: #64748b; }
+.type-badge.fighting { background-color: #b91c1c; }
+.type-badge.dark { background-color: #3f3f46; }
+.type-badge.fairy { background-color: #f472b6; }
+
+/* Move Buttons Grid Overhaul */
+#movePlate {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    padding: 0 !important;
+}
+.move-btn {
+    background: rgba(24, 24, 37, 0.6) !important;
+    border: 2px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    padding: 10px 14px !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    cursor: pointer;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15) !important;
+    text-align: left !important;
+}
+.move-btn:hover:not(:disabled) {
+    border-color: var(--accent) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    transform: translateY(-1px);
+}
+.move-btn .move-name {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.move-btn .move-info {
+    font-size: 9px;
+    color: var(--text-secondary);
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Elemental Gimmick colors for moves cards */
+.move-btn.move-fire { background: linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(239,68,68,0.05) 100%) !important; border-color: rgba(239,68,68,0.3) !important; }
+.move-btn.move-water { background: linear-gradient(135deg, rgba(59,130,246,0.15) 0%, rgba(59,130,246,0.05) 100%) !important; border-color: rgba(59,130,246,0.3) !important; }
+.move-btn.move-grass { background: linear-gradient(135deg, rgba(34,197,94,0.15) 0%, rgba(34,197,94,0.05) 100%) !important; border-color: rgba(34,197,94,0.3) !important; }
+.move-btn.move-electric { background: linear-gradient(135deg, rgba(234,179,8,0.15) 0%, rgba(234,179,8,0.05) 100%) !important; border-color: rgba(234,179,8,0.3) !important; }
+.move-btn.move-normal { background: linear-gradient(135deg, rgba(161,161,170,0.15) 0%, rgba(161,161,170,0.05) 100%) !important; border-color: rgba(161,161,170,0.3) !important; }
+.move-btn.move-fighting { background: linear-gradient(135deg, rgba(185,28,28,0.15) 0%, rgba(185,28,28,0.05) 100%) !important; border-color: rgba(185,28,28,0.3) !important; }
+.move-btn.move-flying { background: linear-gradient(135deg, rgba(168,85,247,0.15) 0%, rgba(168,85,247,0.05) 100%) !important; border-color: rgba(168,85,247,0.3) !important; }
+.move-btn.move-poison { background: linear-gradient(135deg, rgba(168,85,247,0.15) 0%, rgba(168,85,247,0.05) 100%) !important; border-color: rgba(168,85,247,0.3) !important; }
+.move-btn.move-psychic { background: linear-gradient(135deg, rgba(236,72,153,0.15) 0%, rgba(236,72,153,0.05) 100%) !important; border-color: rgba(236,72,153,0.3) !important; }
+.move-btn.move-bug { background: linear-gradient(135deg, rgba(132,204,22,0.15) 0%, rgba(132,204,22,0.05) 100%) !important; border-color: rgba(132,204,22,0.3) !important; }
+.move-btn.move-rock { background: linear-gradient(135deg, rgba(120,113,108,0.15) 0%, rgba(120,113,108,0.05) 100%) !important; border-color: rgba(120,113,108,0.3) !important; }
+.move-btn.move-ground { background: linear-gradient(135deg, rgba(202,138,4,0.15) 0%, rgba(202,138,4,0.05) 100%) !important; border-color: rgba(202,138,4,0.3) !important; }
+.move-btn.move-ice { background: linear-gradient(135deg, rgba(6,182,212,0.15) 0%, rgba(6,182,212,0.05) 100%) !important; border-color: rgba(6,182,212,0.3) !important; }
+.move-btn.move-ghost { background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(99,102,241,0.05) 100%) !important; border-color: rgba(99,102,241,0.3) !important; }
+.move-btn.move-dragon { background: linear-gradient(135deg, rgba(79,70,229,0.15) 0%, rgba(79,70,229,0.05) 100%) !important; border-color: rgba(79,70,229,0.3) !important; }
+.move-btn.move-steel { background: linear-gradient(135deg, rgba(100,116,139,0.15) 0%, rgba(100,116,139,0.05) 100%) !important; border-color: rgba(100,116,139,0.3) !important; }
+.move-btn.move-dark { background: linear-gradient(135deg, rgba(63,63,70,0.15) 0%, rgba(63,63,70,0.05) 100%) !important; border-color: rgba(63,63,70,0.3) !important; }
+.move-btn.move-fairy { background: linear-gradient(135deg, rgba(244,114,182,0.15) 0%, rgba(244,114,182,0.05) 100%) !important; border-color: rgba(244,114,182,0.3) !important; }
+
+/* Control Toggles active states */
+.speed-btn {
+    border-radius: 6px !important;
+    padding: 4px 10px !important;
+}
+.speed-btn.active {
+    background: #ffffff !important;
+    border-color: #ffffff !important;
+    color: #000000 !important;
+    font-weight: 800 !important;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Trainer Card Overhaul Styles */
+#trainerCardDialog {
+    background: #18181b !important;
+    border: 2px solid rgba(255,255,255,0.08) !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
+}
+.trainer-header {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1.5px solid rgba(255,255,255,0.05) !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+}
+.trainer-avatar {
+    width: 64px !important;
+    height: 64px !important;
+    background: #27272a !important;
+    border: 2px solid var(--accent) !important;
+    font-size: 36px !important;
+    box-shadow: 0 0 10px rgba(255,203,5,0.2) !important;
+}
+.trainer-name {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    color: #fff !important;
+}
+.trainer-subtitle {
+    font-size: 11px !important;
+    color: var(--text-secondary) !important;
+}
+.t-stat {
+    background: #27272a !important;
+    border: 1.5px solid rgba(255,255,255,0.05) !important;
+    border-radius: 10px !important;
+    padding: 6px 12px !important;
+    min-width: 75px !important;
+}
+.t-stat .lbl {
+    font-size: 8px !important;
+    color: var(--text-secondary) !important;
+}
+.t-stat .val {
+    font-size: 10px !important;
+    color: var(--accent) !important;
+    font-weight: bold !important;
+}
+
+/* Badges list matching layout */
+.badge-grid {
+    grid-template-columns: repeat(8, 1fr) !important;
+    gap: 8px !important;
+}
+.badge-icon {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 20px !important;
+    border-radius: 50% !important;
+    background: #27272a !important;
+    border: 2px solid rgba(255,255,255,0.05) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    filter: grayscale(100%) !important;
+    opacity: 0.3 !important;
+    padding: 0 !important;
+}
+.badge-icon.unlocked {
+    filter: grayscale(0%) !important;
+    opacity: 1 !important;
+    border-color: var(--accent) !important;
+    background: rgba(255,203,5,0.08) !important;
+    box-shadow: 0 0 15px rgba(255,203,5,0.3) !important;
+}
+.badge-name {
+    display: none !important; /* Hide label, let title handle hover info */
+}
+.recent-battle-item {
+    font-size: 11px !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    background: rgba(0,0,0,0.2) !important;
+    border-color: rgba(255,255,255,0.03) !important;
+}
+.recent-battle-item span.victory {
+    font-family: 'Outfit', sans-serif !important;
+    color: var(--text-secondary) !important;
+}
+.recent-battle-item span.shiny-badge {
+    background: rgba(255,203,5,0.1) !important;
+    border-radius: 4px !important;
+}
+.modalCloseBtn {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    font-weight: bold !important;
+    font-family: 'Outfit', sans-serif !important;
+    cursor: pointer;
+    float: right;
+    margin-top: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+.modalCloseBtn:hover {
+    background: #e2e8f0 !important;
+}
+
+/* Combat control buttons */
+.control-btn {
+    background: #27272a !important;
+    border: 1.5px solid #3f3f46 !important;
+    border-radius: 6px !important;
+    color: #ffffff !important;
+    padding: 6px 12px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    font-family: 'Outfit', sans-serif !important;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+.control-btn:hover:not(:disabled) {
+    background: #3f3f46 !important;
+    border-color: var(--accent) !important;
+}

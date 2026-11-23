@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>
+        window.location.replace("/react-version/");
+    </script>
+    <meta charset="UTF-8">
+    <title>PokeIdle Premium Edition</title>
+    <link rel="stylesheet" href="font-awesome.min.css" charset="utf-8">
+    <link rel="stylesheet" href="style.css" charset="utf-8">
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+</head>
+<body>
+    <small id="version"></small>
+    
+    <div class="game-header">
+        <h1 class="game-title">IdlePoke!</h1>
+        <div class="game-subtitle">Retro Handheld Premium Edition</div>
+    </div>
+    
+    <div id="gameContainer">
+        <!-- Column 1: Navigation Tabs & List View -->
+        <div id="leftColumn" style="display: flex; flex-direction: column; gap: 12px; grid-column: 1; height: 100%; overflow: hidden;">
+            <div id="viewSelectBox">
+                <button id="heal" class="button" style="width: 100%;">Heal</button>
+                <button id="viewRoutes" class="button">Routes</button>
+                <button id="viewRoster" class="button">Team</button>
+                <button id="viewStorage" class="button">PC Storage</button>
+                <button id="viewPokeDex" class="button">PokeDex</button>
+            </div>
+            
+            <div id="listBox">
+                <div id="routesBox">
+                    <select id="regionSelect" onchange="userInteractions.changeRegion()" style="display: none; margin-bottom: 12px; width: 100%;">
+                        <option value="Kanto">Kanto</option>
+                        <option value="Johto">Johto</option>
+                        <option value="Hoenn">Hoenn</option>
+                        <option value="Sinnoh">Sinnoh</option>
+                        <option value="Unova">Unova</option>
+                        <option value="Kalos">Kalos</option>
+                        <option value="Alola">Alola</option>
+                    </select>
+                    
+                    <div id="worldMapContainer">
+                        <img id="activeMapImage" src="assets/kanto_realistic_map.png" alt="World Map">
+                        <div id="mapPins"></div>
+                        <div id="activeMapLabel">Kanto Region</div>
+                    </div>
+
+                    <ul id="routeList"></ul>
+                </div>
+                
+                <div id="rosterBox" style="display: none;">
+                    <div style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="enableDelete" style="cursor: pointer;">
+                        <label for="enableDelete" style="font-size: 11px; font-weight: 700; cursor: pointer;">Manage Team</label>
+                    </div>
+                    <ul id="rosterList"></ul>
+                </div>
+                
+                <div id="storageBox" style="display: none;">
+                    <div style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="autoSort" style="cursor: pointer;">
+                        <label for="autoSort" style="font-size: 11px; font-weight: 700; cursor: pointer;">Auto sort</label>
+                    </div>
+                    <div style="display: flex; gap: 4px; margin-bottom: 8px;">
+                        <select id="pokeSortOrderSelect" onchange="userInteractions.changePokeSortOrder()" style="flex: 1; padding: 4px;">
+                            <option value="lvl">Level</option>
+                            <option value="dex">Pokedex #</option>
+                            <option value="vlv">Level, attack</option>
+                            <option value="time">Newest</option>
+                        </select>
+                        <select id="pokeSortDirSelect" onchange="userInteractions.changePokeSortOrder()" style="flex: 1; padding: 4px;">
+                            <option value="asc">Asc</option>
+                            <option value="desc">Desc</option>
+                        </select>
+                    </div>
+                    <ul id="storageList" class="manageTeamEnabled"></ul>
+                </div>
+                
+                <div id="pokedexBox" style="display: none;">
+                    <select id="dexView" onchange="userInteractions.changeDexView()" style="display: none; margin-bottom: 8px; width: 100%;">
+                        <option value="all">All</option>
+                    </select>
+                    <ul id="dexList"></ul>
+                </div>
+            </div>
+            
+            <!-- Quest & Goal Tracker -->
+            <div id="questBox">
+                <h3>Active Quest</h3>
+                <div id="questTitle" style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--accent); margin-bottom: 6px;">Loading Quest...</div>
+                <div id="questDesc" style="font-size: 9px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 8px;">...</div>
+                <div style="font-size: 9px; font-weight: bold; margin-bottom: 4px; display: flex; justify-content: space-between;">
+                    <span>Progress:</span>
+                    <span id="questProgressText">0 / 0</span>
+                </div>
+                <progress id="questProgressBar" value="0" max="100" style="width: 100%; height: 6px;"></progress>
+                <div id="questReward" style="font-size: 9px; color: var(--grass); font-weight: bold; margin-top: 6px;">Reward: ...</div>
+            </div>
+        </div>
+
+        <!-- Column 2: Visual Battle Arena & Dev Console Logs -->
+        <div id="centerColumn" style="display: flex; flex-direction: column; gap: 16px; grid-column: 2; height: 100%; overflow: hidden;">
+            <div id="battleArena" class="bg-route-plain">
+                <!-- Wild Opponent Pokemon Panel -->
+                <div id="enemyBox">
+                    <div id="enemy" class="pokeBox">
+                        <span class="name"></span>
+                        <img id="enemyImg" class="img" src="" alt="">
+                        <span class="hp"></span>
+                        <progress class="hpBar" value="0" max="100"></progress>
+                        <span class="status"></span>
+                    </div>
+                </div>
+
+                <!-- Active Player Fighter Panel -->
+                <div id="playerBox">
+                    <div id="player" class="pokeBox">
+                        <span class="name"></span>
+                        <img id="playerImg" class="img" src="" alt="">
+                        <span class="hp"></span>
+                        <progress class="hpBar" value="0" max="100"></progress><br>
+                        <span class="exp"></span>
+                        <progress class="expBar" value="0" max="100"></progress>
+                        <span class="status"></span>
+                    </div>
+                    <!-- Clicker Moves Plate -->
+                    <div id="movePlate">
+                        <button class="move-btn" onclick="userInteractions.clickMove(0)"><span class="move-name">---</span><br><span class="move-info">Power: -- | PP: --</span></button>
+                        <button class="move-btn" onclick="userInteractions.clickMove(1)"><span class="move-name">---</span><br><span class="move-info">Power: -- | PP: --</span></button>
+                        <button class="move-btn" onclick="userInteractions.clickMove(2)"><span class="move-name">---</span><br><span class="move-info">Power: -- | PP: --</span></button>
+                        <button class="move-btn" onclick="userInteractions.clickMove(3)"><span class="move-name">---</span><br><span class="move-info">Power: -- | PP: --</span></button>
+                    </div>
+                </div>
+
+                <!-- Town view overlay buttons inside arena -->
+                <div id="townBox" style="display:none; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; height: 100%; padding: 16px; box-sizing: border-box;">
+                    <div id="townIllustration" class="town-illustration" style="display: none;">
+                        <div id="townIllustrationOverlay" class="town-illustration-overlay"></div>
+                    </div>
+                    <div id="townWelcome" style="font-family: 'Press Start 2P', monospace; font-size: 11px; color: #fff; margin-bottom: 8px; text-transform: uppercase; text-shadow: 0 0 8px rgba(255,203,5,0.4); letter-spacing: 1.5px;">Pallet Town</div>
+                    <div id="townDescription" class="town-descr"></div>
+                    <div style="display: flex; gap: 10px; justify-content: center; width: 100%;">
+                        <button onclick="userInteractions.viewTown()" class="button" style="flex: 1; max-width: 140px; margin: 0;"><i class="fa fa-building"></i> Enter Town</button>
+                        <button onclick="userInteractions.trainerBattle()" class="button" id="trainerButton" style="flex: 1; max-width: 140px; margin: 0;"><i class="fa fa-shield"></i> Trainer</button>
+                    </div>
+                </div>
+                <!-- Heal Overlay Animation -->
+                <div id="healOverlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,11,20,0.95); z-index: 300; flex-direction: column; align-items: center; justify-content: center; border-radius: 12px; box-sizing: border-box;">
+                    <div class="healing-tray">
+                        <div class="ball-slot" id="slot0"></div>
+                        <div class="ball-slot" id="slot1"></div>
+                        <div class="ball-slot" id="slot2"></div>
+                        <div class="ball-slot" id="slot3"></div>
+                        <div class="ball-slot" id="slot4"></div>
+                        <div class="ball-slot" id="slot5"></div>
+                    </div>
+                    <div style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #fff; margin-top: 16px; text-transform: uppercase; letter-spacing: 1px;" id="healOverlayText">Healing...</div>
+                </div>
+            </div>
+            
+            <!-- Combat Control Bar -->
+            <div id="combatControlBar">
+                <div class="control-speed-group">
+                    <button class="control-btn speed-btn" id="speed1x" onclick="userInteractions.changeBattleSpeedDirect('fast')">1x</button>
+                    <button class="control-btn speed-btn" id="speed2x" onclick="userInteractions.changeBattleSpeedDirect('normal')">2x</button>
+                    <button class="control-btn speed-btn" id="speed5x" onclick="userInteractions.changeBattleSpeedDirect('slow')">5x</button>
+                </div>
+                <button class="control-btn" id="controlHealBtn" onclick="document.getElementById('heal').click()"><i class="fa fa-plus-circle"></i> Heal</button>
+                <button class="control-btn" onclick="userInteractions.openManageMoves()"><i class="fa fa-pencil-square-o"></i> Manage</button>
+                <button class="control-btn" onclick="userInteractions.openTrainerCard()"><i class="fa fa-vcard-o"></i> Trainer</button>
+            </div>
+
+            <!-- Terminal/Console Logs -->
+            <div id="console">
+                <div id="console-text"></div>
+            </div>
+        </div>
+
+        <!-- Column 3: Stats, Inventory & Options -->
+        <div id="rightColumn" style="display: flex; flex-direction: column; gap: 16px; grid-column: 3; height: 100%; overflow: hidden;">
+            <!-- Gym Leader/Trainer Panel -->
+            <div id="gymLeaderBox" style="display: none; background: rgba(10, 11, 20, 0.70); border: 2.5px solid var(--border-color); border-radius: 12px; padding: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
+                <h3 style="font-family: 'Press Start 2P', monospace; font-size: 8px; margin-bottom: 8px; color: var(--text-primary); text-transform: uppercase;">Active Battle</h3>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div id="gymLeaderAvatar" style="font-size: 24px; width: 44px; height: 44px; background: rgba(0,0,0,0.25); border: 2px solid var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center;">👤</div>
+                    <div>
+                        <div id="gymLeaderName" style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--accent); margin-bottom: 4px;">Brock</div>
+                        <div id="gymLeaderTitle" style="font-size: 10px; color: var(--text-secondary);">Gym Leader</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="invBox">
+                <h3>Backpack & Catch</h3>
+                <div style="margin-bottom: 8px;">
+                    <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Wallet:</span>
+                    <div id="currency" style="margin-top: 2px;">¤0</div>
+                </div>
+                
+                <div style="margin: 8px 0; display: flex; flex-direction: column; gap: 4px;">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">
+                        <input type="checkbox" id="enableCatchAll"> <span>Catch All</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 11px; font-weight: 700;">
+                        <input type="checkbox" id="enableCatchNew"> <span>Catch New</span>
+                    </label>
+                </div>
+                
+                <h4 style="margin: 8px 0 4px; font-size: 10px; font-weight: 700;">Select Catching Ball:</h4>
+                <div style="display: flex; flex-direction: column; gap: 4px; font-size: 11px; font-weight: 600;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="radio" name="name" value="pokeball" checked="true" onclick="userInteractions.changeSelectedBall('pokeball')" id="pokeball">
+                        <span>Pokeballs: <span class="ball-ammount pokeball" style="font-weight: 800; color: var(--grass);">0</span></span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="radio" name="name" value="greatball" onclick="userInteractions.changeSelectedBall('greatball')" id="greatball">
+                        <span>Greatballs: <span class="ball-ammount greatball" style="font-weight: 800; color: var(--water);">0</span></span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="radio" name="name" value="ultraball" onclick="userInteractions.changeSelectedBall('ultraball')" id="ultraball">
+                        <span>Ultraballs: <span class="ball-ammount ultraball" style="font-weight: 800; color: var(--gold);">0</span></span>
+                    </label>
+                </div>
+            </div>
+
+            <div id="navBox">
+                <h3>Menu Options</h3>
+                <button id="muteButton" onclick="Sound.toggle()" class="button"><i class="fa fa-volume-off"></i> Sound Off</button>
+                <button onclick="userInteractions.viewInventory()" class="button"><i class="fa fa-briefcase"></i> Badges / Items</button>
+                <button onclick="userInteractions.viewAchievements()" class="button"><i class="fa fa-trophy"></i> Achievements</button>
+                <button onclick="userInteractions.viewStatistics()" class="button"><i class="fa fa-bar-chart"></i> View Statistics</button>
+                <button onclick="userInteractions.viewSettings()" class="button"><i class="fa fa-cog"></i> Settings</button>
+                <a href="updates.html" target="_blank" class="button" style="display: flex; align-items: center; justify-content: center; height: 28px; text-decoration: none; padding-top: 6px;"><i class="fa fa-list"></i> Updates</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals and Popups -->
+    <div id="modalPopup">
+        <span id="popupText">Test text</span>
+    </div>
+
+    <div id="saveDialogContainer" class="modalContainer" style="display: none">
+        <div id="saveDialog" class="modalDialog">
+            <div>
+                <button id="copySaveText" onclick="userInteractions.copySaveText()" style="display: none">Copy to clipboard</button>
+                <h3 id="saveDialogTitle" class="modalTitle">Export your save</h3>
+            </div>
+            <textarea id="saveText" placeholder="Paste the save data here" style="background: rgba(0,0,0,0.4); border: 1.5px solid var(--border-color); color: #fff; border-radius: 8px; padding: 8px; font-family: monospace; outline: none; margin-bottom: 12px; height: 160px;"></textarea>
+            <div id="loadButtonContainer" style="display: none">
+                <button onclick="userInteractions.importSave()" class="button">Load Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="inventoryContainer" class="modalContainer" style="display: none">
+        <div id="inventoryDialog" class="modalDialog">
+            <div>
+                <h3>Gym Badges</h3>
+                <ul id="badgeList" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;">
+                    <li>Nothing yet</li>
+                </ul>
+                <h3>Special Items Inventory</h3>
+                <ul id="inventoryList" style="line-height: 1.6; font-size: 12px;">
+                    <li>Nothing yet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="achievementsContainer" class="modalContainer" style="display: none">
+        <div id="achievementsDialog" class="modalDialog">
+            <div>
+                <h3 id="achievementsTitle" class="modalTitle">Achievements</h3>
+            </div>
+            <div>
+                <ul id="achievementsList" style="line-height: 1.8; font-size: 12px;">
+                    <li>Nothing yet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="statisticsContainer" class="modalContainer" style="display: none">
+        <div id="statisticsDialog" class="modalDialog">
+            <div>
+                <h3 id="statisticsTitle" class="modalTitle">Statistics</h3>
+            </div>
+            <div>
+                <ul id="statisticsList" style="line-height: 1.8; font-size: 12px;"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="settingsContainer" class="modalContainer" style="display: none">
+        <div id="settingsDialog" class="modalDialog">
+            <div>
+                <h3 id="settingsTitle" class="modalTitle">Visual & General Settings</h3>
+            </div>
+            <div style="font-size: 12px; line-height: 1.6;">
+                <h4>Visual Sprite settings</h4>
+                <p>Choose which sprite you want to display for your active Pokemon:</p>
+                <div style="margin: 8px 0 16px; display: flex; gap: 12px;">
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                        <input type="radio" id="spriteChoiceBack" name="spriteChoice" onchange="userInteractions.changeSpriteChoice()" />
+                        <span>Back Sprite</span>
+                    </label>
+                    <label style="cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                        <input type="radio" id="spriteChoiceFront" name="spriteChoice" onchange="userInteractions.changeSpriteChoice()" />
+                        <span>Front Sprite</span>
+                    </label>
+                </div>
+                
+                <h4>Battle Speed settings</h4>
+                <p>Configure the rate at which battles run:</p>
+                <div style="margin: 8px 0 16px;">
+                    <select id="battleSpeedSelect" onchange="userInteractions.changeBattleSpeed()" style="width: 100%; padding: 6px;">
+                        <option value="slow">Slow (Recommended for reading)</option>
+                        <option value="normal">Normal (Moderate pacing)</option>
+                        <option value="fast">Fast (Original high-speed)</option>
+                    </select>
+                </div>
+                
+                <h4>Console logs settings</h4>
+                <p style="margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                    <input type="checkbox" checked="true" id="enableConsole" style="cursor: pointer;">
+                    <span>Enable combat log text console</span>
+                </p>
+                <button onclick="userInteractions.clearConsole()" class="button" style="margin-bottom: 20px;">Clear Console</button>
+                
+                <h4>Save Management</h4>
+                <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                    <button onclick="userInteractions.forceSave()" class="button">Force Save</button>
+                    <button onclick="userInteractions.exportSaveDialog()" class="button">Export Save</button>
+                    <button onclick="userInteractions.importSaveDialog()" class="button">Import Save</button>
+                </div>
+                <span id="forceSave" style="color:var(--grass); font-weight: bold; margin-bottom: 12px; display: none;">Saved successfully!</span>
+                
+                <h4 style="color: var(--fire)">Wipe Game Data</h4>
+                <p style="color: var(--fire); font-weight: bold; margin-bottom: 8px;">Warning! This is irreversible.</p>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="confirmClearData" style="cursor: pointer;">
+                    <a href="#" style="color: var(--fire); font-weight: bold; font-size: 11px;" onclick="userInteractions.clearGameData()">Clear all data now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="townContainer" class="modalContainer" style="display: none">
+        <div id="townDialog" class="modalDialog" style="max-width: 700px;">
+            <div>
+                <h3 id="townTitle" class="modalTitle">Town Buildings</h3>
+            </div>
+            <!-- RPG Dialogue speech bubble with NPC avatar -->
+            <div class="npc-dialog-box">
+                <div class="npc-avatar-box" id="npcAvatar">🏪</div>
+                <div class="npc-speech-bubble" id="npcDialogue">Welcome to town! Check out the Poke Shop for essential gear, or trade with local trainers.</div>
+            </div>
+            <div id="townBuildings" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; font-size: 12px;">
+                <div id="shop" class="townBuilding" style="background: rgba(0,0,0,0.25); border: 2.5px solid var(--border-color); border-radius: 12px; padding: 12px; box-sizing: border-box;">
+                    <h4>Poke Shop</h4>
+                    <ul id="shopItems" style="line-height: 1.8; margin-top: 8px;"></ul>
+                </div>
+                <div id="upgrades" class="townBuilding" style="background: rgba(0,0,0,0.25); border: 2.5px solid var(--border-color); border-radius: 12px; padding: 12px; box-sizing: border-box;">
+                    <h4>Mart Upgrades</h4>
+                    <ul id="upgradesItems" style="line-height: 1.8; margin-top: 8px; list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 10px;"></ul>
+                </div>
+                <div id="trader" class="townBuilding" style="background: rgba(0,0,0,0.25); border: 2.5px solid var(--border-color); border-radius: 12px; padding: 12px; box-sizing: border-box;">
+                    <h4>Poke Trader</h4>
+                    <div style="font-weight: bold; margin: 8px 0 4px; color: var(--gold);">Sell Pokemon</div>
+                    <ul id="traderSellList" class="traderList" style="line-height: 1.8; margin-bottom: 12px;"></ul>
+                    <div style="font-weight: bold; margin: 8px 0 4px; color: var(--grass);">Buy Pokemon</div>
+                    <ul id="traderBuyList" class="traderList" style="line-height: 1.8;">
+                        <li>Nothing yet</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="storyContainer" class="modalContainer" style="display: none">
+        <div id="storyDialog" class="modalDialog">
+            <div>
+                <h3 id="storyTitle" class="modalTitle"></h3>
+            </div>
+            <div>
+                <div id="storyContent" style="font-size: 13px; line-height: 1.6; margin-bottom: 16px; color: var(--text-secondary);"></div>
+                <button id="storyClose" onclick="userInteractions.closeStory()" class="button">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trainer Card Modal -->
+    <div id="trainerCardContainer" class="modalContainer" style="display: none">
+        <div id="trainerCardDialog" class="modalDialog" style="max-width: 500px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--accent);">Trainer Card</h3>
+                <span onclick="document.getElementById('trainerCardContainer').style.display='none'" style="cursor: pointer; font-size: 16px; font-weight: bold; color: var(--text-secondary);">&times;</span>
+            </div>
+            
+            <div class="trainer-header">
+                <div class="trainer-avatar">🧑‍🎤</div>
+                <div class="trainer-info">
+                    <div class="trainer-name" id="cardTrainerName">Razi</div>
+                    <div class="trainer-subtitle">@r4zi3ld4rk</div>
+                </div>
+                <div class="trainer-stats-row">
+                    <div class="t-stat"><span class="lbl">Badges</span><span class="val" id="cardBadgeCount">0</span></div>
+                    <div class="t-stat"><span class="lbl">Money</span><span class="val" id="cardMoney">¤0</span></div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                <div class="card-section">
+                    <h4>Battle Record</h4>
+                    <ul class="card-records">
+                        <li>Wild Victories: <span id="cardWildVictories">0</span></li>
+                        <li>Trainer Victories: <span id="cardTrainerVictories">0</span></li>
+                        <li>Elite Four: <span id="cardEliteFour">0 / 4</span></li>
+                        <li>Champion: <span style="color: var(--accent); font-weight: bold;">Pending</span></li>
+                    </ul>
+                </div>
+                <div class="card-section">
+                    <h4>Collection</h4>
+                    <ul class="card-records">
+                        <li>Caught: <span id="cardCaughtCount">0</span></li>
+                        <li>Seen: <span id="cardSeenCount">0</span></li>
+                        <li>Shinies: <span id="cardShinyCount">0</span></li>
+                        <li>Sum of Levels: <span id="cardSumLevels">0</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card-section" style="margin-bottom: 16px;">
+                <h4>Gym Badges</h4>
+                <div class="badge-grid">
+                    <div class="badge-icon" id="badge-Brock" title="Boulder Badge">🪨<br><span class="badge-name">Brock</span></div>
+                    <div class="badge-icon" id="badge-Misty" title="Cascade Badge">💧<br><span class="badge-name">Misty</span></div>
+                    <div class="badge-icon" id="badge-Lt. Surge" title="Thunder Badge">⚡<br><span class="badge-name">Surge</span></div>
+                    <div class="badge-icon" id="badge-Erika" title="Rainbow Badge">🌸<br><span class="badge-name">Erika</span></div>
+                    <div class="badge-icon" id="badge-Koga" title="Soul Badge">💨<br><span class="badge-name">Koga</span></div>
+                    <div class="badge-icon" id="badge-Sabrina" title="Marsh Badge">👁️<br><span class="badge-name">Sabrina</span></div>
+                    <div class="badge-icon" id="badge-Blaine" title="Volcano Badge">🔥<br><span class="badge-name">Blaine</span></div>
+                    <div class="badge-icon" id="badge-Giovanni" title="Earth Badge">🕶️<br><span class="badge-name">Giovanni</span></div>
+                </div>
+            </div>
+            
+            <div class="card-section">
+                <h4>Recent Battles</h4>
+                <ul id="cardRecentBattles" class="card-records" style="display: flex; flex-direction: column; gap: 4px; list-style: none; padding-left: 0;">
+                    <li>No battles yet.</li>
+                </ul>
+            </div>
+            
+            <button class="modalCloseBtn" onclick="document.getElementById('trainerCardContainer').style.display='none'">Close</button>
+            <div style="clear: both;"></div>
+        </div>
+    </div>
+
+    <!-- Manage Moves Modal -->
+    <div id="manageMovesContainer" class="modalContainer" style="display: none">
+        <div id="manageMovesDialog" class="modalDialog" style="max-width: 500px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; margin-bottom: 12px;">
+                <h3 style="margin: 0; font-family: 'Press Start 2P', monospace; font-size: 8px; color: var(--accent);">Manage Moves</h3>
+                <span onclick="document.getElementById('manageMovesContainer').style.display='none'" style="cursor: pointer; font-size: 16px; font-weight: bold; color: var(--text-secondary);">&times;</span>
+            </div>
+            
+            <div style="font-family: 'Press Start 2P', monospace; font-size: 8px; color: #fff; margin-bottom: 12px; text-transform: uppercase;" id="manageMovesPokeName">CHARMANDER — LV. 12</div>
+            
+            <div class="card-section" style="margin-bottom: 16px;">
+                <h4>Current Moves (<span id="manageMovesEquippedCount">0</span>/4)</h4>
+                <ul id="manageMovesEquippedList" style="list-style: none; padding-left: 0; display: flex; flex-direction: column; gap: 6px;">
+                    <!-- Equipped moves -->
+                </ul>
+            </div>
+            
+            <div class="card-section" style="margin-bottom: 16px;">
+                <h4>Available Moves</h4>
+                <div id="manageMovesAvailableList" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; padding-right: 4px;">
+                    <!-- Available moves -->
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1.5px solid var(--border-color); padding-top: 12px; margin-top: 12px;">
+                <div style="display: flex; gap: 6px;">
+                    <button onclick="userInteractions.optimizeMoves()" class="button" style="padding: 4px 8px; font-size: 10px; margin: 0;"><i class="fa fa-bolt"></i> Optimize</button>
+                    <button onclick="userInteractions.resetMoves()" class="button" style="padding: 4px 8px; font-size: 10px; margin: 0;"><i class="fa fa-refresh"></i> Reset</button>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button onclick="document.getElementById('manageMovesContainer').style.display='none'" class="button" style="padding: 4px 8px; font-size: 10px; margin: 0;">Cancel</button>
+                    <button onclick="userInteractions.saveMoveLoadout()" class="button" style="padding: 4px 8px; font-weight: bold; color: #000; background: var(--accent); border-color: var(--accent); font-size: 10px; margin: 0;">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Original game script dependencies served statically via Vite public directory -->
+    <script src="/src/sound.js"></script>
+    <script src="/src/db.js"></script>
+    <script src="/src/evolutions.js"></script>
+    <script src="/src/typeModifiers.js"></script>
+    <script src="/src/routes.js"></script>
+    <script src="/src/upgrades.js"></script>
+    <script src="/src/quests.js"></script>
+    <script src="/src/town.js"></script>
+    <script src="/src/achievements.js"></script>
+    <script src="/src/utilities.js"></script>
+    <script src="/src/display.js"></script>
+    <script src="/src/poke.js"></script>
+    <script src="/src/player.js"></script>
+    <script src="/src/combat.js"></script>
+    <script src="/src/actions.js"></script>
+    <script src="/src/story.js"></script>
+    <script src="/src/main.js"></script>
+</body>
+</html>
